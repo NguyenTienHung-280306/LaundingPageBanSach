@@ -1,0 +1,97 @@
+@page
+@model CheckoutModel
+@using System.Globalization
+@{
+    Layout = "_SunLayout";
+    ViewData["Title"] = "Thanh toán";
+    var vi = new CultureInfo("vi-VN");
+    var b = Model.Book;
+}
+
+<section class="co">
+    <div class="wheel" aria-hidden="true">
+        <svg viewBox="0 0 600 600" fill="none" stroke="#B8761C" stroke-width="1.2">
+            <circle cx="300" cy="300" r="290" /><circle cx="300" cy="300" r="270" stroke-dasharray="1.5 11.5" />
+            <circle cx="300" cy="300" r="236" /><circle cx="300" cy="300" r="110" />
+            <g class="r2"><circle cx="300" cy="300" r="205" /><path d="M300 95V505M95 300H505M155 155L445 445M445 155L155 445" stroke-opacity=".5" /></g>
+        </svg>
+    </div>
+
+    <div class="co-wrap">
+        <header class="co-head">
+            <p class="eyebrow">Chỉ còn một bước</p>
+            <h1>Hoàn tất đơn hàng</h1>
+        </header>
+
+        <form method="post" id="coForm" class="co-grid">
+            <div class="fcard">
+                <div asp-validation-summary="ModelOnly" class="err"></div>
+
+                <h2>Thông tin nhận hàng</h2>
+
+                <div class="field">
+                    <label for="Input_CustomerName">Họ và tên</label>
+                    <input asp-for="Input.CustomerName" autocomplete="name" placeholder="Nguyễn Văn A" required maxlength="100">
+                    <span asp-validation-for="Input.CustomerName" class="err"></span>
+                </div>
+
+                <div class="field">
+                    <label for="Input_Phone">Số điện thoại</label>
+                    <input asp-for="Input.Phone" type="tel" autocomplete="tel" placeholder="0901 234 567" required pattern="(\+84|0)[0-9 .-]{9,13}" inputmode="tel">
+                    <span asp-validation-for="Input.Phone" class="err"></span>
+                </div>
+
+                <div class="field">
+                    <label for="Input_Address">Địa chỉ giao hàng</label>
+                    <textarea asp-for="Input.Address" rows="3" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" required minlength="10" maxlength="300"></textarea>
+                    <span asp-validation-for="Input.Address" class="err"></span>
+                </div>
+
+                <h2>Phương thức thanh toán</h2>
+                <div class="pay">
+                    <i class="dot"></i>
+                    <div>
+                        <b>Thanh toán khi nhận hàng (COD)</b>
+                        <small>Bạn kiểm tra sách rồi mới thanh toán cho người giao hàng.</small>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="receipt" id="receipt" data-price="@((long)b.Price)">
+                <p class="eyebrow">Đơn hàng của bạn</p>
+
+                <div class="item">
+                    @if (!string.IsNullOrEmpty(b.CoverImage))
+                    {
+                        <img src="@b.CoverImage" alt="Bìa sách @b.Title">
+                    }
+                    else
+                    {
+                        <div class="cov"><span>@b.Title</span></div>
+                    }
+                    <div>
+                        <h3>@b.Title</h3>
+                        <small>@b.Author</small>
+                        <div class="unit">@(b.Price.ToString("N0", vi))₫ <span>/ cuốn</span></div>
+                    </div>
+                </div>
+
+                <div class="qty-row">
+                    <span>Số lượng</span>
+                    <div class="stepper">
+                        <button type="button" id="qMinus" aria-label="Giảm số lượng">−</button>
+                        <b id="qVal">@Model.Input.Quantity</b>
+                        <button type="button" id="qPlus" aria-label="Tăng số lượng">+</button>
+                    </div>
+                    <input type="hidden" asp-for="Input.Quantity" />
+                </div>
+
+                <div class="line"><span>Phí giao hàng</span><span>Giao toàn quốc</span></div>
+                <div class="total"><span>Tổng cộng</span><b id="total">@((b.Price * Model.Input.Quantity).ToString("N0", vi))₫</b></div>
+
+                <button type="submit" class="btn main wide" id="submitBtn">Xác nhận đặt hàng</button>
+                <p class="fine">Chúng tôi sẽ gọi xác nhận qua số điện thoại bạn đã nhập.</p>
+            </aside>
+        </form>
+    </div>
+</section>

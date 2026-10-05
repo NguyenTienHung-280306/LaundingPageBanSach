@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] – Nhà Sách Mặt Trời</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bookstore.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/checkout.css" asp-append-version="true">
+</head>
+<body class="inner">
+    <nav>
+        <a class="logo" href="/">Nhà Sách Mặt Trời</a>
+        <ul>
+            <li><a href="/#hanh-trinh">Hành trình</a></li>
+            <li><a href="/#review">Review</a></li>
+            <li><a href="/#chi-tiet">Thông tin sách</a></li>
+        </ul>
+        <a class="pill" href="/">Về trang chủ</a>
+    </nav>
+
+    <main>@RenderBody()</main>
+
+    <footer>© 2026 Nhà Sách Mặt Trời</footer>
+
+    <script src="~/js/checkout.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

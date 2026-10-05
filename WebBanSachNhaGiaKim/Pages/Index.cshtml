@@ -1,0 +1,247 @@
+﻿@page
+@model IndexModel
+@using System.Globalization
+@{
+    Layout = null;
+    var vi = new CultureInfo("vi-VN");
+    var book = Model.Book;
+}
+@functions {
+    static string Pct(double? v) => (((v ?? 0) / 5) * 100).ToString("0", CultureInfo.InvariantCulture);
+    static string Initials(string name) => string.Concat(name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(w => char.ToUpper(w[0])).Take(2));
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@book.Title – @book.Author</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bookstore.css" asp-append-version="true">
+</head>
+<body>
+
+    <nav>
+        <a class="logo" href="#">Nhà Sách Mặt Trời</a>
+        <ul><li><a href="#hanh-trinh">Hành trình</a></li><li><a href="#review">Review</a></li><li><a href="#chi-tiet">Thông tin sách</a></li></ul>
+        <a class="pill" href="/checkout">Thanh toán</a>
+    </nav>
+
+    <header class="hero" id="hero">
+        <!-- Bánh xe chiêm tinh xoay phía sau -->
+        <div class="wheel" id="wheel">
+            <svg viewBox="0 0 600 600" fill="none" stroke="#B8761C" stroke-width="1.2">
+                <circle cx="300" cy="300" r="290" />
+                <circle cx="300" cy="300" r="270" stroke-dasharray="1.5 11.5" />
+                <circle cx="300" cy="300" r="236" />
+                <circle cx="300" cy="300" r="170" stroke-dasharray="3 9" />
+                <circle cx="300" cy="300" r="110" />
+                <g id="glyphs" fill="#B8761C" stroke="none" font-size="26" text-anchor="middle" font-family="serif"></g>
+                <g class="r2"><circle cx="300" cy="300" r="205" /><path d="M300 95V505M95 300H505M155 155L445 445M445 155L155 445" stroke-opacity=".5" /></g>
+            </svg>
+        </div>
+
+        <div class="txt">
+            <h1 id="title">@book.Title</h1>
+            <p class="by">Tác giả <b>@book.Author</b> · Bản dịch tiếng Việt</p>
+            <p class="lead">@book.Description</p>
+            <blockquote>@book.Quote</blockquote>
+            <p class="sold"><b>Hơn 100 triệu bản</b> đã bán toàn cầu.</p>
+            <div class="btns">
+                <a class="btn main" href="/checkout">Thanh toán ngay</a>
+                <a class="btn" href="#hanh-trinh">Khám phá cuốn sách</a>
+            </div>
+        </div>
+
+        <div class="stage" id="stage">
+            <div class="float">
+                <div class="book" id="book">
+                    <!-- Ảnh bìa lấy từ cột Books.CoverImage; không có ảnh thì hiện bản vẽ SVG -->
+                    <div class="face front">
+                        <svg viewBox="0 0 270 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bìa sách Nhà Giả Kim">
+                            <defs><linearGradient id="nv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2F2877" /><stop offset="1" stop-color="#1A1550" /></linearGradient></defs>
+                            <rect width="270" height="390" fill="url(#nv)" />
+                            <g fill="none" stroke="#D9B26A" stroke-width="1" opacity=".75">
+                                <rect x="12" y="12" width="246" height="366" rx="2" />
+                                <path d="M20 330q30-20 60 0t60 0 60 0 50 0M20 346q30-20 60 0t60 0 60 0 50 0" />
+                                <path d="M30 70l22-34 22 34zM205 80l18-28 18 28z" /><circle cx="215" cy="150" r="14" /><circle cx="55" cy="150" r="9" />
+                                <path d="M40 200q25-30 50 0M180 205q25-30 50 0" />
+                            </g>
+                            <g fill="#D9B26A"><circle cx="40" cy="110" r="1.8" /><circle cx="238" cy="115" r="1.8" /><circle cx="30" cy="250" r="1.8" /><circle cx="240" cy="260" r="2.2" /><circle cx="70" cy="290" r="1.5" /><circle cx="200" cy="300" r="1.5" /><circle cx="125" cy="40" r="1.5" /></g>
+                            <text x="135" y="36" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#E8C98A" letter-spacing="5">PAULO COELHO</text>
+                            <g font-family="Georgia,serif" fill="#E8C98A" text-anchor="middle" font-size="46" font-weight="700">
+                                <text x="135" y="130">NHÀ</text><text x="135" y="182">GIẢ</text><text x="135" y="234">KIM</text>
+                            </g>
+                            <text x="135" y="300" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#E8C98A" letter-spacing="2">BƯỚC CHÂN KIẾM TÌM KHO BÁU</text>
+                        </svg>
+                        @if (!string.IsNullOrEmpty(book.CoverImage))
+                        {
+                            <img class="cimg" src="@book.CoverImage" alt="Bìa sách @book.Title" onerror="this.remove()">
+                        }
+                    </div>
+                    <div class="face back">
+                        <div class="bk">
+                            <b>@book.Author.ToUpper()</b>
+                            <i>“Khi bạn khao khát một điều gì đó, cả vũ trụ sẽ chung sức giúp bạn đạt được.”</i>
+                            <span>@book.Description</span>
+                            <div class="bar"></div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(book.BackImage))
+                        {
+                            <img class="bimg" src="@book.BackImage" alt="" onerror="this.remove()">
+                        }
+                    </div>
+                    <div class="face spine"><span>@book.Title.ToUpper()</span></div>
+                    <div class="face pages"></div>
+                    <div class="face top"></div>
+                    <div class="face bottom"></div>
+                </div>
+            </div>
+            <div class="shadow"></div>
+            <div class="ctrl">
+                <div>
+                    <button type="button" data-ry="0">Bìa trước</button>
+                    <button type="button" data-ry="90">Gáy sách</button>
+                    <button type="button" data-ry="180">Bìa sau</button>
+                    <button type="button" id="autoBtn" aria-pressed="true">Tự xoay</button>
+                </div>
+                <span class="hint">Kéo để xoay 360°</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="sold-strip" id="thong-ke">
+        <div class="sold-card">
+            @if (Model.TotalOrders > 0)
+            {
+                <div class="sc"><b data-count="@Model.TotalSold">@Model.TotalSold.ToString("N0", vi)</b><span>cuốn đã được đặt mua</span></div>
+                <div class="sc"><b data-count="@Model.TotalOrders">@Model.TotalOrders.ToString("N0", vi)</b><span>đơn hàng</span></div>
+                <div class="sc"><b data-count="@Model.RecentOrders">@Model.RecentOrders.ToString("N0", vi)</b><span>đơn trong 7 ngày qua</span></div>
+            }
+            else
+            {
+                <div class="sc first"><b>Mở bán</b><span>Hãy là người đầu tiên đặt mua cuốn sách này</span></div>
+            }
+            <a class="btn main" href="/checkout">Đặt mua ngay</a>
+        </div>
+    </div>
+
+    <section id="hanh-trinh">
+        <h2>Bốn chặng đường của Santiago</h2>
+        <p class="sub">Mỗi nơi cậu đi qua là một lần mất đi điều cũ và học được điều mới.</p>
+        <div class="path">
+            @foreach (var stop in Model.Stops)
+            {
+                <div class="stop"><i>@stop.SortOrder</i><h3>@stop.Name</h3><p>@stop.Description</p></div>
+            }
+        </div>
+    </section>
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></symbol></svg>
+
+    <section class="blog" id="review">
+        <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0V38Q360 92 720 46T1440 36V0Z" fill="#FDF3E1" /></svg>
+        <div class="glow"></div>
+        <div class="bwrap">
+            <div class="bhead rv">
+                <h2>Sổ tay review</h2>
+                <p>Những trang viết bên ngọn nến về cuốn sách đã đi cùng hàng triệu người đọc.</p>
+            </div>
+
+            @if (Model.Featured is { } f)
+            {
+                var paras = f.Content.Split(new[] { "\r\n\r\n", "\n\n" }, StringSplitOptions.RemoveEmptyEntries);
+                var scores = new[] { f.ScoreInspire, f.ScoreStyle, f.ScoreDepth, f.ScoreReadable }.Where(x => x.HasValue).Select(x => x!.Value).ToList();
+                var avg = scores.Count > 0 ? scores.Average() : 0;
+
+                <article class="feat rv">
+                    <figure class="shot" id="shot">
+                        <div class="seal"><b>@avg.ToString("0.0", vi)</b><small>trên 5</small></div>
+                        <img src="@f.Image" alt="@f.Title">
+                        <button type="button" class="hot d" style="--x:45%;--y:17%"><i></i><span><b>Đồng hồ cát</b>Thời gian cần để một giấc mơ chín, và sự kiên nhẫn của người đi tìm.</span></button>
+                        <button type="button" class="hot r d" style="--x:92%;--y:13%"><i></i><span><b>Ngọn nến</b>Ngọn lửa nhỏ của trái tim, thứ giữ Santiago đi tiếp khi sa mạc quá rộng.</span></button>
+                        <button type="button" class="hot r" style="--x:90%;--y:37%"><i></i><span><b>Quả cầu pha lê</b>Điềm báo: những dấu hiệu chỉ hiện ra với người chịu lắng nghe.</span></button>
+                        <button type="button" class="hot" style="--x:50%;--y:56%"><i></i><span><b>Bìa xanh dập vàng</b>Họa tiết sa mạc, kim tự tháp và những vì sao trải kín mặt bìa.</span></button>
+                        <figcaption>Chạm vào các chấm sáng để khám phá từng chi tiết</figcaption>
+                    </figure>
+
+                    <div class="post">
+                        <div class="meta"><span class="tg">@f.Tag</span><span>@f.ReadMinutes phút đọc · @(f.PublishedAt.ToString("d 'tháng' M, yyyy", vi))</span></div>
+                        <h3>@f.Title</h3>
+                        @for (var i = 0; i < paras.Length; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <p class="dc">@paras[i].Trim()</p>
+                            }
+                            else if (i == paras.Length - 1 && paras.Length > 2)
+                            {
+
+                                <p class="pq">@paras[i].Trim()</p>
+                            }
+                            else
+                            {
+
+                                <p>@paras[i].Trim()</p>
+                            }
+                        }
+                        <div class="rate">
+                            <div class="meter"><span>Cảm hứng</span><u><b style="--v:@Pct(f.ScoreInspire)%"></b></u><em>@(f.ScoreInspire?.ToString("0.0", vi))</em></div>
+                            <div class="meter"><span>Văn phong</span><u><b style="--v:@Pct(f.ScoreStyle)%"></b></u><em>@(f.ScoreStyle?.ToString("0.0", vi))</em></div>
+                            <div class="meter"><span>Chiều sâu</span><u><b style="--v:@Pct(f.ScoreDepth)%"></b></u><em>@(f.ScoreDepth?.ToString("0.0", vi))</em></div>
+                            <div class="meter"><span>Dễ đọc</span><u><b style="--v:@Pct(f.ScoreReadable)%"></b></u><em>@(f.ScoreReadable?.ToString("0.0", vi))</em></div>
+                        </div>
+                        <div class="who">
+                            <span class="av">@Initials(f.Author)</span>
+                            <div><div class="suns"><svg><use href="#sun" /></svg><svg><use href="#sun" /></svg><svg><use href="#sun" /></svg><svg><use href="#sun" /></svg><svg><use href="#sun" /></svg></div><small>@f.Author · Người đọc</small></div>
+                            <a class="more" href="#">Đọc toàn bộ bài review</a>
+                        </div>
+                    </div>
+                </article>
+            }
+
+            <div class="cards">
+                @foreach (var n in Model.Notes)
+                {
+                    <a class="note rv" href="#">
+                        <div class="tl">
+                            <div class="ph"><img src="@n.Image" alt="@n.Title" loading="lazy"></div>
+                            <div class="bd">
+                                <div class="meta"><span class="tg">@n.Tag</span><span>@n.ReadMinutes phút đọc</span></div>
+                                <h4>@n.Title</h4><p>@n.Excerpt</p><span class="more">Đọc tiếp</span>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+
+    <div class="band"><p>“Khi bạn khao khát một điều gì đó, cả vũ trụ sẽ chung sức giúp bạn đạt được.”</p><span>Paulo Coelho</span></div>
+
+    <section class="detail" id="chi-tiet">
+        <div>
+            <h2>Thông tin sách</h2>
+            <table>
+                <tr><td>Tác giả</td><td>@book.Author</td></tr>
+                <tr><td>Dịch giả</td><td>@book.Translator</td></tr>
+                <tr><td>Nhà xuất bản</td><td>@book.Publisher</td></tr>
+                <tr><td>Số trang</td><td>@book.Pages trang</td></tr>
+                <tr><td>Hình thức</td><td>Bìa cứng</td></tr>
+            </table>
+        </div>
+        <div class="buy">
+            <div class="pr"><span id="price">@(book.Price.ToString("N0", vi))₫</span>@if (book.OldPrice is { } oldPrice) {
+                <s>@(oldPrice.ToString("N0", vi))₫</s>
+            }
+        </div>
+        <p>Còn hàng · Giao toàn quốc</p>
+        <a class="btn main" href="/checkout">Thanh toán ngay</a>
+    </div>
+</section>
+
+<footer>© 2026 Nhà Sách Mặt Trời</footer>
+
+<script src="~/js/bookstore.js" asp-append-version="true"></script>
+</body>
+</html>

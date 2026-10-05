@@ -1,0 +1,46 @@
+@page
+@model ThanhCongModel
+@using System.Globalization
+@{
+    Layout = "_SunLayout";
+    ViewData["Title"] = "Đặt hàng thành công";
+    var vi = new CultureInfo("vi-VN");
+    var o = Model.Order!;
+}
+
+<section class="co">
+    <div class="wheel" aria-hidden="true">
+        <svg viewBox="0 0 600 600" fill="none" stroke="#B8761C" stroke-width="1.2">
+            <circle cx="300" cy="300" r="290" /><circle cx="300" cy="300" r="270" stroke-dasharray="1.5 11.5" />
+            <circle cx="300" cy="300" r="236" /><circle cx="300" cy="300" r="110" />
+            <g class="r2"><circle cx="300" cy="300" r="205" /><path d="M300 95V505M95 300H505M155 155L445 445M445 155L155 445" stroke-opacity=".5" /></g>
+        </svg>
+    </div>
+
+    <div class="ok">
+        <svg class="sunok" viewBox="0 0 140 140" aria-hidden="true">
+            <defs><radialGradient id="okg" cx="40%" cy="35%"><stop offset="0" stop-color="#FFD66B" /><stop offset="1" stop-color="#EA580C" /></radialGradient></defs>
+            <circle class="rays" cx="70" cy="70" r="60" stroke="#F59E0B" stroke-width="9" stroke-dasharray="4 16.8" fill="none" />
+            <circle cx="70" cy="70" r="42" fill="url(#okg)" />
+            <path class="tick" d="M51 72l14 14 26-30" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+
+        <h1>Đặt hàng thành công!</h1>
+        <p class="ok-sub">Cảm ơn <b>@o.CustomerName</b>. Chúng tôi sẽ gọi xác nhận qua số điện thoại <b>@Model.MaskedPhone</b> trong thời gian sớm nhất.</p>
+
+        <div class="receipt ticket">
+            <div class="line"><span>Mã đơn hàng</span><b class="code">@Model.OrderCode</b></div>
+            <div class="line"><span>Thời gian đặt</span><span>@(Model.CreatedLocal.ToString("HH:mm 'ngày' dd/MM/yyyy", vi))</span></div>
+            <div class="line"><span>Sản phẩm</span><span>@o.Book?.Title</span></div>
+            <div class="line"><span>Số lượng</span><span>@o.Quantity cuốn</span></div>
+            <div class="line"><span>Giao đến</span><span class="addr">@o.Address</span></div>
+            <div class="line"><span>Thanh toán</span><span>Khi nhận hàng (COD)</span></div>
+            <div class="total"><span>Tổng cộng</span><b>@(o.Total.ToString("N0", vi))₫</b></div>
+        </div>
+
+        <div class="btns center">
+            <a class="btn main" href="/">Về trang chủ</a>
+            <a class="btn" href="/#review">Đọc review trong lúc chờ</a>
+        </div>
+    </div>
+</section>
